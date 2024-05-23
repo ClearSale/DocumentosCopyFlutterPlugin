@@ -12,13 +12,6 @@ class MethodChannelDocumentoscopyFlutterSdk
   final methodChannel = const MethodChannel('documentoscopy_flutter_sdk');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version =
-        await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
-  }
-
-  @override
   Future<CSDocumentosCopyResult> openCSDocumentosCopy(
       String clientId,
       String clientSecretId,

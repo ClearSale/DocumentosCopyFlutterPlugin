@@ -26,10 +26,6 @@ abstract class DocumentoscopyFlutterSdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
   Future<CSDocumentosCopyResult> openCSDocumentosCopy(
       String clientId,
       String clientSecretId,

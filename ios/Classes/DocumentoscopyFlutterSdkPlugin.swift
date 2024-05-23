@@ -40,8 +40,6 @@ public class DocumentoscopyFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
-        case "getPlatformVersion":
-            result("iOS " + UIDevice.current.systemVersion)
         case "openCSDocumentosCopy":
             if let arguments = call.arguments as? [String:Any] {
                 let sdkParams: NSDictionary = [
@@ -65,7 +63,6 @@ public class DocumentoscopyFlutterSdkPlugin: NSObject, FlutterPlugin {
         }
     }
     
-    // TODO -> Check how to properly get params.
     private func openCSDocumentosCopy(sdkParams: NSDictionary, resultParam: @escaping FlutterResult) {
         if self.flutterResult != nil {
             // Means that we are already running and somehow the button got triggered again.
