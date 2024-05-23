@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'documentoscopy_flutter_sdk_data.dart';
 import 'documentoscopy_flutter_sdk_method_channel.dart';
 
 abstract class DocumentoscopyFlutterSdkPlatform extends PlatformInterface {
@@ -25,5 +26,9 @@ abstract class DocumentoscopyFlutterSdkPlatform extends PlatformInterface {
 
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
+  }
+
+  Future<CSDocumentosCopyResult> openCSDocumentosCopy(String clientId, String clientSecretId, String? identifierId, String? cpf) {
+    throw UnimplementedError('openCSDocumentosCopy() has not been implemented.');
   }
 }

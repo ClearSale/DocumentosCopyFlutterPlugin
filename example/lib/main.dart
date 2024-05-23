@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:documentoscopy_flutter_sdk/documentoscopy_flutter_sdk.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,25 +19,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   final _documentoscopyFlutterSdkPlugin = DocumentoscopyFlutterSdk();
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> _formValues = {};
+  String _result = "N/A";
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
+  Future<void> callCSDocumentosCopySDK(String clientId, String clientSecretId, String? identifierId, String? cpf) async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
+    String result;
+
     try {
-      platformVersion =
-          await _documentoscopyFlutterSdkPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
+      var sdkResponse =
+          await _documentoscopyFlutterSdkPlugin.openCSDocumentosCopy(
+            clientId,
+            clientSecretId,
+            identifierId,
+            cpf
+          );
+
+      result = jsonEncode(sdkResponse);
+    } on PlatformException catch (e) {
+      result = "Error: $e";
+    } catch (e) {
+      result = "Error: $e";
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -43,19 +57,123 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      _result = result;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final inputMask = MaskTextInputFormatter(
+        mask: '###.###.###-##',
+        filter: { "#": RegExp(r'[0-9]') },
+        type: MaskAutoCompletionType.lazy
+    );
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('CSDocumentosCopy'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: ListView(
+              children: [
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        onSaved: (String? clientIdValue) => _formValues["clientId"] = clientIdValue!,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Text is empty';
+                          }
+
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter clientId',
+                            label: Text("ClientId *")
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        onSaved: (String? clientSecretIdValue) => _formValues["clientSecretId"] = clientSecretIdValue!,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Text is empty';
+                          }
+
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter clientSecretId',
+                            label: Text("ClientSecretId *")
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        onSaved: (String? identifierIdValue) => _formValues["identifierId"] = identifierIdValue,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Text is empty';
+                          }
+
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter identifierId',
+                            label: Text("IdentifierId *")
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        onSaved: (String? cpfValue) => _formValues["cpf"] = cpfValue,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Text is empty';
+                          }
+
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter CPF',
+                            label: Text('CPF')
+                        ),
+                        inputFormatters: [
+                          MaskTextInputFormatter(
+                            mask: '###.###.###-##',
+                            filter: { "#": RegExp(r'[0-9]') },
+                            type: MaskAutoCompletionType.lazy
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      ElevatedButton(onPressed: () async {
+                        if (_formKey.currentState?.validate() == true) {
+                          _formKey.currentState!.save();
+
+                          await callCSDocumentosCopySDK(
+                              _formValues["clientId"],
+                              _formValues["clientSecretId"],
+                              _formValues["identifierId"],
+                              _formValues["cpf"]
+                          );
+                        }
+                      }, child: const Text('Open CSDocumentosCopy'))
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text("Result is: $_result"),
+              ],
+            ),
+          ),
         ),
       ),
     );
