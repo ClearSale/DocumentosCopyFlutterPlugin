@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:documentoscopy_flutter_sdk/documentoscopy_flutter_sdk.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 void main() {
@@ -24,25 +25,44 @@ class _MyAppState extends State<MyApp> {
   final Map<String, dynamic> _formValues = {};
   String _result = "N/A";
 
+  Color primaryColor = const Color(0xFFFF4800);
+  Color secondaryColor = const Color(0xFFFF4800);
+  Color tertiaryColor = const Color(0xFFEFEFEF);
+  Color titleColor = const Color(0xFF283785);
+  Color paragraphColor = const Color(0xFF353840);
+
   @override
   void initState() {
     super.initState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> callCSDocumentosCopySDK(String clientId, String clientSecretId, String? identifierId, String? cpf) async {
+  Future<void> callCSDocumentosCopySDK(
+      String clientId,
+      String clientSecretId,
+      String identifierId,
+      String cpf,
+      Color primaryColor,
+      Color secondaryColor,
+      Color tertiaryColor,
+      Color titleColor,
+      Color paragraphColor) async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     String result;
-
+    primaryColor.toHexString();
     try {
       var sdkResponse =
           await _documentoscopyFlutterSdkPlugin.openCSDocumentosCopy(
-            clientId,
-            clientSecretId,
-            identifierId,
-            cpf
-          );
+              clientId,
+              clientSecretId,
+              identifierId,
+              cpf,
+              primaryColor,
+              secondaryColor,
+              tertiaryColor,
+              titleColor,
+              paragraphColor);
 
       result = jsonEncode(sdkResponse);
     } on PlatformException catch (e) {
@@ -63,119 +83,335 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final inputMask = MaskTextInputFormatter(
-        mask: '###.###.###-##',
-        filter: { "#": RegExp(r'[0-9]') },
-        type: MaskAutoCompletionType.lazy
-    );
-
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('CSDocumentosCopy'),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: ListView(
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        onSaved: (String? clientIdValue) => _formValues["clientId"] = clientIdValue!,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Text is empty';
-                          }
+      home: Builder(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('CSDocumentosCopy'),
+          ),
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ListView(
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          onSaved: (String? clientIdValue) =>
+                              _formValues["clientId"] = clientIdValue!,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Text is empty';
+                            }
 
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter clientId',
-                            label: Text("ClientId *")
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter clientId',
+                              label: Text("ClientId *")),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        onSaved: (String? clientSecretIdValue) => _formValues["clientSecretId"] = clientSecretIdValue!,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Text is empty';
-                          }
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          onSaved: (String? clientSecretIdValue) =>
+                              _formValues["clientSecretId"] =
+                                  clientSecretIdValue!,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Text is empty';
+                            }
 
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter clientSecretId',
-                            label: Text("ClientSecretId *")
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter clientSecretId',
+                              label: Text("ClientSecretId *")),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        onSaved: (String? identifierIdValue) => _formValues["identifierId"] = identifierIdValue,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Text is empty';
-                          }
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          onSaved: (String? identifierIdValue) =>
+                              _formValues["identifierId"] = identifierIdValue,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Text is empty';
+                            }
 
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter identifierId',
-                            label: Text("IdentifierId *")
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter identifierId',
+                              label: Text("IdentifierId *")),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        onSaved: (String? cpfValue) => _formValues["cpf"] = cpfValue,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Text is empty';
-                          }
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          onSaved: (String? cpfValue) =>
+                              _formValues["cpf"] = cpfValue,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Text is empty';
+                            }
 
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Enter CPF',
-                            label: Text('CPF')
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter CPF',
+                              label: Text('CPF')),
+                          inputFormatters: [
+                            MaskTextInputFormatter(
+                                mask: '###.###.###-##',
+                                filter: {"#": RegExp(r'[0-9]')},
+                                type: MaskAutoCompletionType.lazy)
+                          ],
                         ),
-                        inputFormatters: [
-                          MaskTextInputFormatter(
-                            mask: '###.###.###-##',
-                            filter: { "#": RegExp(r'[0-9]') },
-                            type: MaskAutoCompletionType.lazy
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 40),
-                      ElevatedButton(onPressed: () async {
-                        if (_formKey.currentState?.validate() == true) {
-                          _formKey.currentState!.save();
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                const Text("Primary Color"),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Color picker'),
+                                            content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                              pickerColor: primaryColor,
+                                              onColorChanged: (Color color) {
+                                                setState(() {
+                                                  primaryColor = color;
+                                                });
+                                              },
+                                            )),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge,
+                                                ),
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(primaryColor.toHexString())),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                const Text("Secondary Color"),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Color picker'),
+                                            content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                              pickerColor: secondaryColor,
+                                              onColorChanged: (Color color) {
+                                                setState(() {
+                                                  secondaryColor = color;
+                                                });
+                                              },
+                                            )),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge,
+                                                ),
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(secondaryColor.toHexString())),
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                const Text("Tertiary Color"),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Color picker'),
+                                            content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                              pickerColor: tertiaryColor,
+                                              onColorChanged: (Color color) {
+                                                setState(() {
+                                                  tertiaryColor = color;
+                                                });
+                                              },
+                                            )),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge,
+                                                ),
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(tertiaryColor.toHexString())),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                const Text("Title Color"),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Color picker'),
+                                            content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                              pickerColor: titleColor,
+                                              onColorChanged: (Color color) {
+                                                setState(() {
+                                                  titleColor = color;
+                                                });
+                                              },
+                                            )),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge,
+                                                ),
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(titleColor.toHexString())),
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                const Text("Paragraph Color"),
+                                ElevatedButton(
+                                    onPressed: () async {
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text('Color picker'),
+                                            content: SingleChildScrollView(
+                                                child: ColorPicker(
+                                              pickerColor: paragraphColor,
+                                              onColorChanged: (Color color) {
+                                                setState(() {
+                                                  paragraphColor = color;
+                                                });
+                                              },
+                                            )),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                style: TextButton.styleFrom(
+                                                  textStyle: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge,
+                                                ),
+                                                child: const Text('OK'),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Text(paragraphColor.toHexString())),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 40),
+                        ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState?.validate() == true) {
+                                _formKey.currentState!.save();
 
-                          await callCSDocumentosCopySDK(
-                              _formValues["clientId"],
-                              _formValues["clientSecretId"],
-                              _formValues["identifierId"],
-                              _formValues["cpf"]
-                          );
-                        }
-                      }, child: const Text('Open CSDocumentosCopy'))
-                    ],
+                                await callCSDocumentosCopySDK(
+                                    _formValues["clientId"],
+                                    _formValues["clientSecretId"],
+                                    _formValues["identifierId"],
+                                    _formValues["cpf"],
+                                    primaryColor,
+                                    secondaryColor,
+                                    tertiaryColor,
+                                    titleColor,
+                                    paragraphColor);
+                              }
+                            },
+                            child: const Text('Open CSDocumentosCopy'))
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text("Result is: $_result"),
-              ],
+                  const SizedBox(height: 8),
+                  Text("Result is: $_result"),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

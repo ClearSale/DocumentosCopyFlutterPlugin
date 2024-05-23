@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'documentoscopy_flutter_sdk_data.dart';
@@ -9,7 +10,8 @@ abstract class DocumentoscopyFlutterSdkPlatform extends PlatformInterface {
 
   static final Object _token = Object();
 
-  static DocumentoscopyFlutterSdkPlatform _instance = MethodChannelDocumentoscopyFlutterSdk();
+  static DocumentoscopyFlutterSdkPlatform _instance =
+      MethodChannelDocumentoscopyFlutterSdk();
 
   /// The default instance of [DocumentoscopyFlutterSdkPlatform] to use.
   ///
@@ -28,7 +30,17 @@ abstract class DocumentoscopyFlutterSdkPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<CSDocumentosCopyResult> openCSDocumentosCopy(String clientId, String clientSecretId, String? identifierId, String? cpf) {
-    throw UnimplementedError('openCSDocumentosCopy() has not been implemented.');
+  Future<CSDocumentosCopyResult> openCSDocumentosCopy(
+      String clientId,
+      String clientSecretId,
+      String identifierId,
+      String cpf,
+      Color primaryColor,
+      Color secondaryColor,
+      Color tertiaryColor,
+      Color titleColor,
+      Color paragraphColor) {
+    throw UnimplementedError(
+        'openCSDocumentosCopy() has not been implemented.');
   }
 }
