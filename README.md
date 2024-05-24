@@ -9,7 +9,7 @@ flutter pub add documentoscopy_flutter_sdk
 ```
 
 #### Android
-Adicione um arquivo `clearsale.gradle.env` na raiz do seu projeto de react-native.
+Adicione um arquivo `clearsale.gradle.env` na raiz do seu projeto flutter.
 Esse arquivo deve conter as seguintes propriedades:
 
 ```
@@ -121,5 +121,3 @@ Ao realizar o download e utilizar nosso SDK você estará concordando com a segu
 **Copyright © 2022 ClearSale**
 
 Todos os direitos são reservados, sendo concedida a permissão para usar o software da maneira como está, não sendo permitido qualquer modificação ou cópia para qualquer fim. O Software é licenciado com suas atuais configurações “tal como está” e sem garantia de qualquer espécie, nem expressa e nem implícita, incluindo mas não se limitando, garantias de comercialização, adequação para fins particulares e não violação de direitos patenteados. Em nenhuma hipótese os titulares dos Direitos Autorais podem ser responsabilizados por danos, perdas, causas de ação, quer seja por contrato ou ato ilícito, ou outra ação tortuosa advinda do uso do Software ou outras ações relacionadas com este Software sem prévia autorização escrita do detentor dos direitos autorais.
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
