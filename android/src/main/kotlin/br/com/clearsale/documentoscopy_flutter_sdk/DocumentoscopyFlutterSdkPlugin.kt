@@ -119,7 +119,7 @@ class DocumentoscopyFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, Activity
 
           Log.d(logTag, "Result is $responseMap")
 
-          flutterResult!!.success(logTag)
+          flutterResult!!.success(responseMap)
           resetResult()
         }
 

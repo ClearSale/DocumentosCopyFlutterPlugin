@@ -37,7 +37,7 @@ class MethodChannelDocumentoscopyFlutterSdk
 
     if (response != null) {
       return CSDocumentosCopyResult.fromJson(
-          response.cast() as Map<String, dynamic>);
+          response.cast().map((k, v) => MapEntry(k.toString(), v)));
     }
 
     throw "No response from native side";

@@ -10,4 +10,11 @@ class CSDocumentosCopyResult {
       json['sessionId'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'documentType': documentType,
+      'sessionId': sessionId,
+    };
+  }
 }
