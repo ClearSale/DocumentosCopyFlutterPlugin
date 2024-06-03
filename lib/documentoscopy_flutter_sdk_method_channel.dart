@@ -28,11 +28,11 @@ class MethodChannelDocumentoscopyFlutterSdk
       "clientSecretId": clientSecretId,
       "identifierId": identifierId,
       "cpf": cpf,
-      "primaryColor": primaryColor.toHexString(),
-      "secondaryColor": secondaryColor.toHexString(),
-      "tertiaryColor": tertiaryColor.toHexString(),
-      "titleColor": titleColor.toHexString(),
-      "paragraphColor": paragraphColor.toHexString()
+      "primaryColor": primaryColor.toHexString(enableAlpha: false),
+      "secondaryColor": secondaryColor.toHexString(enableAlpha: false),
+      "tertiaryColor": tertiaryColor.toHexString(enableAlpha: false),
+      "titleColor": titleColor.toHexString(enableAlpha: false),
+      "paragraphColor": paragraphColor.toHexString(enableAlpha: false)
     });
 
     if (response != null) {

@@ -26,7 +26,7 @@ extension UIColor {
 public class DocumentoscopyFlutterSdkPlugin: NSObject, FlutterPlugin {
     
     private let LOG_TAG = "[CSDocumentosCopyFlutter]"
-    private var flutterResult: FlutterResult?;
+    private var flutterResult: FlutterResult?
     
     private func resetFlutterResult() -> Void {
         self.flutterResult = nil

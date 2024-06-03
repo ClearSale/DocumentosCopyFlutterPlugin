@@ -50,7 +50,6 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     String result;
-    primaryColor.toHexString();
     try {
       var sdkResponse =
           await _documentoscopyFlutterSdkPlugin.openCSDocumentosCopy(
@@ -185,6 +184,7 @@ class _MyAppState extends State<MyApp> {
                                             title: const Text('Color picker'),
                                             content: SingleChildScrollView(
                                                 child: ColorPicker(
+                                              enableAlpha: false,
                                               pickerColor: primaryColor,
                                               onColorChanged: (Color color) {
                                                 setState(() {
@@ -209,7 +209,7 @@ class _MyAppState extends State<MyApp> {
                                         },
                                       );
                                     },
-                                    child: Text(primaryColor.toHexString())),
+                                    child: Text(primaryColor.toHexString(enableAlpha: false))),
                               ],
                             ),
                             Column(
@@ -248,7 +248,7 @@ class _MyAppState extends State<MyApp> {
                                         },
                                       );
                                     },
-                                    child: Text(secondaryColor.toHexString())),
+                                    child: Text(secondaryColor.toHexString(enableAlpha: false))),
                               ],
                             )
                           ],
@@ -293,7 +293,7 @@ class _MyAppState extends State<MyApp> {
                                         },
                                       );
                                     },
-                                    child: Text(tertiaryColor.toHexString())),
+                                    child: Text(tertiaryColor.toHexString(enableAlpha: false))),
                               ],
                             ),
                             Column(
@@ -332,7 +332,7 @@ class _MyAppState extends State<MyApp> {
                                         },
                                       );
                                     },
-                                    child: Text(titleColor.toHexString())),
+                                    child: Text(titleColor.toHexString(enableAlpha: false))),
                               ],
                             )
                           ],
@@ -377,7 +377,7 @@ class _MyAppState extends State<MyApp> {
                                         },
                                       );
                                     },
-                                    child: Text(paragraphColor.toHexString())),
+                                    child: Text(paragraphColor.toHexString(enableAlpha: false))),
                               ],
                             ),
                           ],
