@@ -160,7 +160,7 @@ class _MyAppState extends State<MyApp> {
                           decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Enter CPF',
-                              label: Text('CPF')),
+                              label: Text('CPF *')),
                           inputFormatters: [
                             MaskTextInputFormatter(
                                 mask: '###.###.###-##',
