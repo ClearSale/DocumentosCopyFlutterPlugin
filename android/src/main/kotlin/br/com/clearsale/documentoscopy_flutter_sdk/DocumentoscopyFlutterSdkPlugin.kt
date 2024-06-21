@@ -31,7 +31,7 @@ class DocumentoscopyFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, Activity
 
   private var logTag = "[CSDocumentosCopy]"
 
-  var flutterResult: Result? = null
+  private var flutterResult: Result? = null
 
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     context = flutterPluginBinding.applicationContext
@@ -68,19 +68,19 @@ class DocumentoscopyFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, Activity
   }
 
   private fun resetResult() {
-    flutterResult = null;
+    flutterResult = null
   }
 
-  private fun openCSDocumentosCopy(call: MethodCall, result: Result) {
+  private fun openCSDocumentosCopy(call: MethodCall, flutterResultParam: Result) {
     if (flutterResult !== null) {
       // Means that we are already running and somehow the button got triggered again.
       // In this case just return.
 
-      return;
+      return
     }
 
     try {
-      flutterResult = result;
+      flutterResult = flutterResultParam
 
       val clientId = call.argument<String>("clientId")
       val clientSecretId = call.argument<String>("clientSecretId")
@@ -111,7 +111,7 @@ class DocumentoscopyFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, Activity
       val csDocumentosCopyConfig = CSDocumentoscopy(clientId, clientSecretId, identifierId, cpf, sdkConfig)
       val listener = object: CSDocumentoscopySDKListener {
         override fun didFinishCapture(result: CSDocumentoscopySDKResult) {
-          Log.d(logTag, "Called didFinishCapture");
+          Log.d(logTag, "Called didFinishCapture")
 
           val responseMap = HashMap<String, String?>()
           responseMap["documentType"] = result.documentType?.toString()
@@ -119,26 +119,26 @@ class DocumentoscopyFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, Activity
 
           Log.d(logTag, "Result is $responseMap")
 
-          flutterResult!!.success(responseMap)
+          flutterResultParam.success(responseMap)
           resetResult()
         }
 
         override fun didOpen() {
           // Nothing to do here.
-          Log.d(logTag, "Called didOpen");
+          Log.d(logTag, "Called didOpen")
         }
 
         override fun didReceiveError(error: CSDocumentoscopySDKError) {
-          Log.e(logTag, "Called didReceiveError", null);
+          Log.e(logTag, "Called didReceiveError", null)
 
-          flutterResult!!.error(error.errorCode.toString(), error.text, null)
+          flutterResultParam.error(error.errorCode.toString(), error.text, null)
           resetResult()
         }
 
         override fun didTapClose() {
-          Log.d(logTag, "Called didTapClose");
+          Log.d(logTag, "Called didTapClose")
 
-          result.error("UserCancel", "UserCancel", null)
+          flutterResultParam.error("UserCancel", "UserCancel", null)
           resetResult()
         }
       }
@@ -150,7 +150,7 @@ class DocumentoscopyFlutterSdkPlugin: FlutterPlugin, MethodCallHandler, Activity
       }
     } catch (t: Throwable) {
       Log.e(logTag, "Error starting CSDocumentosCopySDK", t)
-      result.error("SDKError", "Failed to start CSDocumentosCopySDK", t)
+      flutterResultParam.error("SDKError", "Failed to start CSDocumentosCopySDK", t)
 
       resetResult()
     }
